@@ -1,1 +1,99 @@
+class Nodo:
+    def __init__(self, codigo, descripcion):
+        self.codigo = codigo
+        self.descripcion = descripcion
+        self.siguiente = None
 
+class ListaEnlazada:
+    def __init__(self):
+        self.cabeza = None
+
+    def agregar(self, codigo, descripcion):
+        nuevo = Nodo(codigo, descripcion)
+        # TODO 1: agrega el nodo al final sin perder los anteriores
+        if self.cabeza is None:
+            self.cabeza = nuevo
+        else:
+            actual = self.cabeza
+            while actual.siguiente is not None:
+                actual = actual.siguiente
+            actual.siguiente = nuevo
+
+    def mostrar(self):
+        actual = self.cabeza
+        while actual is not None:
+            print(f"{actual.codigo} - {actual.descripcion}")
+            actual = actual.siguiente
+
+class Pila:
+    def __init__(self):
+        self.items = []
+
+    def apilar(self, elemento):
+        # TODO 2: agrega el elemento a la cima
+        self.items.append(elemento)
+
+    def desapilar(self):
+        # TODO 3: devuelve y elimina el último elemento; controla pila vacía
+        if len(self.items) == 0:
+            return "Error: La pila de farmacia está vacía"
+        return self.items.pop()
+
+    # RETO INDIVIDUAL (Farmacia)
+    def consultar_cima(self):
+        if len(self.items) == 0:
+            return "Error: La pila está vacía, no hay medicamentos para consultar"
+        return self.items[-1] # Retorna el último sin eliminarlo
+
+class Cola:
+    def __init__(self):
+        self.items = []
+
+    def encolar(self, elemento):
+        # TODO 4: agrega el elemento al final
+        self.items.append(elemento)
+
+    def desencolar(self):
+        # TODO 5: devuelve y elimina el primer elemento; controla cola vacía
+        if len(self.items) == 0:
+            return "Error: La cola de atención está vacía"
+        return self.items.pop(0)
+
+# ==========================================
+# PRUEBAS DEL CASO: FARMACIA
+# ==========================================
+if __name__ == "__main__":
+    print("--- SISTEMA DE GESTIÓN: FARMACIA ---\n")
+
+    # 1. Lista Enlazada (Inventario)
+    print("1. REGISTRO EN LISTA ENLAZADA (Inventario):")
+    inventario = ListaEnlazada()
+    inventario.agregar("F01", "Paracetamol 500mg")
+    inventario.agregar("F02", "Ibuprofeno 400mg")
+    inventario.agregar("F03", "Amoxicilina 250mg")
+    inventario.mostrar()
+
+    # 2. Cola (Atención de clientes / FIFO)
+    print("\n2. ATENCIÓN EN COLA (Turnos de recetas - FIFO):")
+    turnos = Cola()
+    turnos.encolar("Cliente A - Receta Paracetamol")
+    turnos.encolar("Cliente B - Receta Ibuprofeno")
+    print(f"Atendiendo: {turnos.desencolar()}")
+    print(f"Atendiendo: {turnos.desencolar()}")
+
+    # 3. Pila (Lote de medicamentos / LIFO)
+    print("\n3. GESTIÓN EN PILA (Lote de recepción - LIFO):")
+    lote = Pila()
+    lote.apilar("Caja 1: Paracetamol")
+    lote.apilar("Caja 2: Ibuprofeno")
+    lote.apilar("Caja 3: Amoxicilina")
+
+    # 4. RETO INDIVIDUAL
+    print("\n--- RETO INDIVIDUAL ---")
+    ultimo = lote.consultar_cima()
+    print(f"Último medicamento agregado (sin eliminar): {ultimo}")
+    
+    print("\nDespachando lote:")
+    print(lote.desapilar())
+    print(lote.desapilar())
+    print(lote.desapilar())
